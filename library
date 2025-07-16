@@ -136,7 +136,7 @@ function library.new(library_title, cfg_location)
     local ScreenGui = library:create("ScreenGui", {
         ResetOnSpawn = false,
         ZIndexBehavior = Enum.ZIndexBehavior.Global,
-        Name = "unknown",
+        Name = "14141CryptHubManyagiUn41413knownGuiSey12918217818",
         IgnoreGuiInset = true,
     })
 
