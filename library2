@@ -871,7 +871,7 @@ PresetThemes:Dropdown({
 		"Black Ice",
 		"Terminal Wave"
 	},
-	State = "Tokyo Night",
+	State = "Quartz",
 	Callback = function(v)
 		local themes = {
 					['Tokyo Night'] = {
