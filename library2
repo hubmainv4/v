@@ -1335,7 +1335,7 @@ PresetThemes:Dropdown({
 		Menu:Keybind({
 			Name = "UI Toggle",
 			Flag = "MenuKey",
-			Default = Enum.KeyCode.End,
+			Default = Enum.KeyCode.F4,
 			Mode = "Toggle",
 			Callback = Library.SetOpen
 		})
