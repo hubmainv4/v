@@ -1895,7 +1895,7 @@ do
 			BackgroundTransparency = 1,
 			BorderSizePixel = 0,
 			BorderColor3 = Color3.new(0, 0, 0),
-			Text = "Ch4dr3y.xyz|V1",
+			Text = "CryptHub Neo | ver 1.3.2",
 			TextColor3 = "Accent",
 			AutoButtonColor = false,
 			FontFace = Library.Font,
