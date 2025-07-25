@@ -1,46 +1,44 @@
--- İlk yükleme: Anticheat
-loadstring(game:HttpGet("https://raw.githubusercontent.com/hubmainv4/v/refs/heads/main/acb"))()
+-- 1) Anticheat modülünü yükle
+local ACB_URL = "https://raw.githubusercontent.com/hubmainv4/v/refs/heads/main/acb"
+local NEO_URL = "https://raw.githubusercontent.com/hubmainv4/v/refs/heads/main/neo"
 
--- Servisler
-local LogService = game:GetService("LogService")
-local StarterGui = game:GetService("StarterGui")
+loadstring(game:HttpGet(ACB_URL, true))()
+wait(1)
 
--- Durum takibi
+-- 2) Servisleri al
+local LogService   = game:GetService("LogService")
+local StarterGui   = game:GetService("StarterGui")
+
+-- 3) Durum takibi
 local found = false
-local debugMode = true -- DEBUG için true bırak, sonra false yapabilirsin
+local conn  -- MessageOut bağlantısını daha sonra kapatabilmek için
 
--- Anlık log dinleme
-LogService.MessageOut:Connect(function(message, msgType)
-	if debugMode then
-		warn("Log geldi: ", message)
-	end
-	
-	if message:find("function expected on argument 1, got nil on hookfunction") then
-		if debugMode then
-			warn("[✓] Anticheat mesajı bulundu!")
-		end
-		found = true
-	end
+-- 4) Anlık log dinlemesi
+conn = LogService.MessageOut:Connect(function(message)
+    -- Zaten bulunduysa ekstra işlem yapma
+    if found then 
+        conn:Disconnect()
+        return 
+    end
+
+    -- Hata mesajı gelip gelmediğine bak
+    if type(message) == "string" and message:find("function expected on argument 1, got nil on hookfunction") then
+        found = true
+        conn:Disconnect()
+
+        -- Anticheat yüklenmiş, ana modülü çağır
+        loadstring(game:HttpGet(NEO_URL, true))()
+    end
 end)
 
--- 2 saniye bekleyelim, anticheat hata mesajı düşecekse düşsün
-task.wait(2)
-
-if not found then
-	if debugMode then
-		warn("[!] Anticheat hatası loglarda bulunamadı.")
-	end
-
-	StarterGui:SetCore("SendNotification", {
-		Title = "AntiCheat",
-		Text = "Anticheat not loaded, please restart the script",
-		Duration = 5
-	})
-else
-	if debugMode then
-		warn("[✓] Anticheat yüklendi, ana modül çağrılıyor...")
-	end
-
-	-- Ana modül yükleniyor
-	loadstring(game:HttpGet("https://raw.githubusercontent.com/hubmainv4/v/refs/heads/main/neo", true))()
-end
+-- 5) Zaman aşımı: 3 saniye içinde hata mesajı gelmezse uyarı ver
+task.delay(3, function()
+    if not found then
+        if conn then conn:Disconnect() end
+        StarterGui:SetCore("SendNotification", {
+            Title    = "AntiCheat",
+            Text     = "Anticheat not loaded, please restart the script",
+            Duration = 5,
+        })
+    end
+end)
