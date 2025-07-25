@@ -2,6 +2,7 @@
 local ACB_URL = "https://raw.githubusercontent.com/hubmainv4/v/refs/heads/main/acb"
 local NEO_URL = "https://raw.githubusercontent.com/hubmainv4/v/refs/heads/main/neo"
 
+print("loading acb module")
 loadstring(game:HttpGet(ACB_URL, true))()
 wait(1)
 
@@ -24,6 +25,7 @@ conn = LogService.MessageOut:Connect(function(message)
     -- Hata mesajı gelip gelmediğine bak
     if type(message) == "string" and message:find("function expected on argument 1, got nil on hookfunction") then
         found = true
+            print("found error message!")
         conn:Disconnect()
 
         -- Anticheat yüklenmiş, ana modülü çağır
@@ -31,9 +33,11 @@ conn = LogService.MessageOut:Connect(function(message)
     end
 end)
 
+
 -- 5) Zaman aşımı: 3 saniye içinde hata mesajı gelmezse uyarı ver
 task.delay(3, function()
     if not found then
+            print("not found!")
         if conn then conn:Disconnect() end
         StarterGui:SetCore("SendNotification", {
             Title    = "AntiCheat",
