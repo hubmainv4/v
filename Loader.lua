@@ -241,6 +241,7 @@ for _, gameInfo in ipairs(games) do
 	
 	btn.MouseButton1Click:Connect(function()
 		if gameInfo.link then
+				StopTPDetection()
 			local success, err = pcall(function()
 				loadstring(game:HttpGet(gameInfo.link))()
 			end)
