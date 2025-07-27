@@ -89,7 +89,8 @@ loader.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 
 
 local games = {
-	{ name = "State of Anarchy", link = "https://raw.githubusercontent.com/hubmainv4/v/refs/heads/main/neo.lua" },
+	{ name = "SOA | CryptHub Neo", link = "https://raw.githubusercontent.com/hubmainv4/v/refs/heads/main/neo.lua" },
+	{ name = "SOA | CryptHub Old", link = "https://raw.githubusercontent.com/hubmainv4/v/refs/heads/main/Ch" },
 }
 
 
