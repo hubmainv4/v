@@ -38,8 +38,7 @@ local function StartTPDetection()
 		local distance = (currentPosition - lastPosition).Magnitude
 
 		if distance > threshold then
-			warn("AC FLAG: Teleport tespit edildi! Mesafe:", math.floor(distance))
-			localPlayer:Kick("Anti Cheat failed, dm vasli for issues.")
+			localPlayer:Kick("AC Bypass, dm vasli for issues.")
 		end
 		lastPosition = currentPosition
 	end)
@@ -64,7 +63,7 @@ game:GetService("ReplicatedStorage").Connections.RemoteFunction:InvokeServer(ohN
 wait(2.0)
 	
 StopTPDetection()
-
+	
 end
 
 checkac()
