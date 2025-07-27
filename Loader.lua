@@ -62,7 +62,8 @@ local ohBoolean4 = false
 
 game:GetService("ReplicatedStorage").Connections.RemoteFunction:InvokeServer(ohNumber1, ohNumber2, ohNumber3, ohBoolean4)
 
-
+wait(2.0)
+	
 StopTPDetection()
 
 end
