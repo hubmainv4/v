@@ -12,8 +12,6 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/hubmainv4/v/refs/head
 
 wait(1)
 
-
-
 local lastPosition = rootPart.Position
 local threshold = 50
 local heartbeatConn = nil
@@ -47,7 +45,7 @@ local function StartTPDetection()
 end
 
 local function StopTPDetection()
-	if acsuccess and heartbeatConn then
+                heartbeatConn then
 		heartbeatConn:Disconnect()
 		heartbeatConn = nil
 	end
@@ -62,7 +60,7 @@ local ohBoolean4 = false
 
 game:GetService("ReplicatedStorage").Connections.RemoteFunction:InvokeServer(ohNumber1, ohNumber2, ohNumber3, ohBoolean4)
 
-wait(2.0)
+wait(1.0)
 	
 StopTPDetection()
 
@@ -241,7 +239,6 @@ for _, gameInfo in ipairs(games) do
 	
 	btn.MouseButton1Click:Connect(function()
 		if gameInfo.link then
-				StopTPDetection()
 			local success, err = pcall(function()
 				loadstring(game:HttpGet(gameInfo.link))()
 			end)
