@@ -44,7 +44,7 @@ local function StartTPDetection()
 end
 
 local function StopTPDetection()
-                heartbeatConn then
+                if heartbeatConn then
 		heartbeatConn:Disconnect()
 		heartbeatConn = nil
 	end
