@@ -1,3 +1,4 @@
+getgenv().Key = "llllIIIllllCryptHubOntop!!####$$$½#"
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 local localPlayer = Players.LocalPlayer
@@ -31,7 +32,7 @@ local function StartTPDetection()
 		heartbeatConn:Disconnect()
 	end
 
-	heartbeatConn = RunService.Heartbeat:Connect(function()
+heartbeatConn = RunService.Heartbeat:Connect(function()
 		if not rootPart or not rootPart.Parent then return end
 
 		local currentPosition = rootPart.Position
@@ -258,3 +259,5 @@ end
 RunService.Heartbeat:Connect(function()
 	uiGradient.Rotation = (uiGradient.Rotation + 4) % 360
 end)
+
+RunService.Heartbeat:Disconnect()
