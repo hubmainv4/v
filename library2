@@ -1895,7 +1895,7 @@ do
 			BackgroundTransparency = 1,
 			BorderSizePixel = 0,
 			BorderColor3 = Color3.new(0, 0, 0),
-			Text = "CryptHub Neo | 1.4.1F - SILENT AIM UPDATE",
+			Text = "CryptHub Neo | 1.4.2 - ZOOM + FIXES",
 			TextColor3 = "Accent",
 			AutoButtonColor = false,
 			FontFace = Library.Font,
