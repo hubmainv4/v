@@ -258,5 +258,3 @@ end
 RunService.Heartbeat:Connect(function()
 	uiGradient.Rotation = (uiGradient.Rotation + 4) % 360
 end)
-
-RunService.Heartbeat:Disconnect()
