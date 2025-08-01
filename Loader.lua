@@ -1,4 +1,3 @@
-getgenv().Key = "llllIIIllllCryptHubOntop!!####$$$½#"
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 local localPlayer = Players.LocalPlayer
