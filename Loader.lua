@@ -1,10 +1,8 @@
-print("hello")
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
-local UserInputService = game:GetService("UserInputService")
-local TweenService = game:GetService("TweenService")
-local CoreGui = game:GetService("CoreGui")
-local player = Players.LocalPlayer
+local localPlayer = Players.LocalPlayer
+local character = localPlayer.Character or localPlayer.CharacterAdded:Wait()
+local rootPart = character:WaitForChild("HumanoidRootPart")
 
 
 local function checkac()
@@ -40,7 +38,7 @@ heartbeatConn = RunService.Heartbeat:Connect(function()
 		local distance = (currentPosition - lastPosition).Magnitude
 
 		if distance > threshold then
-			localPlayer:Kick("AC Bypass failed, dm vasli for issues.")
+			localPlayer:Kick("AC Bypass, dm vasli for issues.")
 		end
 		lastPosition = currentPosition
 	end)
@@ -70,7 +68,14 @@ end
 
 checkac()
 
-local connections = {}
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+local UserInputService = game:GetService("UserInputService")
+local TweenService = game:GetService("TweenService")
+local CoreGui = game:GetService("CoreGui")
+
+local player = Players.LocalPlayer
+
 
 if CoreGui:FindFirstChild("LoaderUI") then
 	CoreGui.LoaderUI:Destroy()
@@ -81,12 +86,13 @@ loader.Name = "LoaderUI"
 loader.Parent = CoreGui
 loader.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 
+
 local games = {
 	{ name = "SOA | CryptHub Neo", link = "https://raw.githubusercontent.com/hubmainv4/v/refs/heads/main/neo.lua" },
 	{ name = "SOA | CryptHub Old", link = "https://raw.githubusercontent.com/hubmainv4/v/refs/heads/main/Ch" },
 }
 
--- UI oluşturma kodu aynı...
+
 local main = Instance.new("Frame")
 main.Name = "Main"
 main.BackgroundColor3 = Color3.fromRGB(13, 12, 12)
@@ -94,6 +100,7 @@ main.Position = UDim2.new(0.43, 0, 0.39, 0)
 main.Size = UDim2.new(0.145, 0, 0.27, 0)
 main.BorderSizePixel = 0
 main.Parent = loader
+
 
 local uiStroke = Instance.new("UIStroke")
 uiStroke.Parent = main
@@ -121,10 +128,10 @@ title.TextStrokeTransparency = 0
 title.TextWrapped = true
 title.TextSize = 18
 title.BorderSizePixel = 0
-
 local titleCorner = Instance.new("UICorner")
 titleCorner.Parent = title
 titleCorner.CornerRadius = UDim.new(0, 2)
+
 
 local holder = Instance.new("Frame")
 holder.Name = "Holder"
@@ -143,6 +150,7 @@ holderStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
 local holderCorner = Instance.new("UICorner")
 holderCorner.Parent = holder
 holderCorner.CornerRadius = UDim.new(0, 4)
+
 
 local scrollingFrame = Instance.new("ScrollingFrame")
 scrollingFrame.Name = "ScrollingFrame"
@@ -165,35 +173,24 @@ gridLayout.SortOrder = Enum.SortOrder.LayoutOrder
 gridLayout.CellPadding = UDim2.new(0, 10, 0, 10)
 gridLayout.CellSize = UDim2.new(0, 165, 0, 25)
 
-local function cleanup()
-	for _, connection in pairs(connections) do
-		if connection then
-			connection:Disconnect()
-		end
-	end
-	connections = {}
-end
 
 local dragging = false
 local dragStart, startPos
 
-connections[#connections + 1] = title.InputBegan:Connect(function(input)
+title.InputBegan:Connect(function(input)
 	if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
 		dragging = true
 		dragStart = UserInputService:GetMouseLocation()
 		startPos = main.Position
-		
-		local inputChangedConn
-		inputChangedConn = input.Changed:Connect(function()
+		input.Changed:Connect(function()
 			if input.UserInputState == Enum.UserInputState.End then
 				dragging = false
-				inputChangedConn:Disconnect()
 			end
 		end)
 	end
 end)
 
-connections[#connections + 1] = UserInputService.InputChanged:Connect(function(input)
+UserInputService.InputChanged:Connect(function(input)
 	if dragging and input.UserInputType == Enum.UserInputType.MouseMovement then
 		local delta = UserInputService:GetMouseLocation() - dragStart
 		main.Position = UDim2.new(
@@ -205,14 +202,16 @@ connections[#connections + 1] = UserInputService.InputChanged:Connect(function(i
 	end
 end)
 
+
 local function addHoverEffect(button)
-	connections[#connections + 1] = button.MouseEnter:Connect(function()
+	button.MouseEnter:Connect(function()
 		TweenService:Create(button, TweenInfo.new(0.15), {BackgroundColor3 = Color3.fromRGB(102, 0, 204)}):Play()
 	end)
-	connections[#connections + 1] = button.MouseLeave:Connect(function()
+	button.MouseLeave:Connect(function()
 		TweenService:Create(button, TweenInfo.new(0.15), {BackgroundColor3 = Color3.fromRGB(14, 14, 14)}):Play()
 	end)
 end
+
 
 for _, gameInfo in ipairs(games) do
 	local btn = Instance.new("TextButton")
@@ -238,7 +237,7 @@ for _, gameInfo in ipairs(games) do
 	
 	addHoverEffect(btn)
 	
-	connections[#connections + 1] = btn.MouseButton1Click:Connect(function()
+	btn.MouseButton1Click:Connect(function()
 		if gameInfo.link then
 			local success, err = pcall(function()
 				loadstring(game:HttpGet(gameInfo.link))()
@@ -250,19 +249,12 @@ for _, gameInfo in ipairs(games) do
 			warn("No link provided for", gameInfo.name)
 		end
 		
-		cleanup()
+		
 		loader:Destroy()
 	end)
 end
 
-connections[#connections + 1] = RunService.Heartbeat:Connect(function()
-	if uiGradient and uiGradient.Parent then
-		uiGradient.Rotation = (uiGradient.Rotation + 4) % 360
-	end
-end)
 
-connections[#connections + 1] = loader.AncestryChanged:Connect(function()
-	if not loader.Parent then
-		cleanup()
-	end
+RunService.Heartbeat:Connect(function()
+	uiGradient.Rotation = (uiGradient.Rotation + 4) % 360
 end)
