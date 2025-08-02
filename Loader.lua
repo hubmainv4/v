@@ -8,72 +8,66 @@ local localPlayer = Players.LocalPlayer
 local character = localPlayer.Character or localPlayer.CharacterAdded:Wait()
 local rootPart = character:WaitForChild("HumanoidRootPart")
 
-
+local connections = {}
 
 local function checkac()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/hubmainv4/v/refs/heads/main/acb.lua", true))()
+    
+    wait(1)
+    
+    local lastPosition = rootPart.Position
+    local threshold = 50
+    local heartbeatConn = nil
+    
+    connections[#connections + 1] = localPlayer.CharacterAdded:Connect(function(char)
+        character = char
+        rootPart = char:WaitForChild("HumanoidRootPart")
+        lastPosition = rootPart.Position
+    end)
+    
+    local function StartTPDetection()
+        lastPosition = rootPart.Position
+        if heartbeatConn then
+            heartbeatConn:Disconnect()
+        end
 
-loadstring(game:HttpGet("https://raw.githubusercontent.com/hubmainv4/v/refs/heads/main/acb.lua", true))()
+        heartbeatConn = RunService.Heartbeat:Connect(function()
+            if not rootPart or not rootPart.Parent then return end
 
-wait(1)
+            local currentPosition = rootPart.Position
+            local distance = (currentPosition - lastPosition).Magnitude
 
+            if distance > threshold then
+                localPlayer:Kick("AC Bypass failed, use a better executor and dm vasli for questions")
+            end
+            lastPosition = currentPosition
+        end)
+        
+        connections[#connections + 1] = heartbeatConn
+    end
 
+    local function StopTPDetection()
+        if heartbeatConn then
+            heartbeatConn:Disconnect()
+            heartbeatConn = nil
+        end
+    end
 
-local lastPosition = rootPart.Position
-local threshold = 50
-local heartbeatConn = nil
+    StartTPDetection()
+        
+    local ohNumber1 = 999
+    local ohNumber2 = -113.3239517211914
+    local ohNumber3 = 50.57432174682617
+    local ohBoolean4 = false
 
+    game:GetService("ReplicatedStorage").Connections.RemoteFunction:InvokeServer(ohNumber1, ohNumber2, ohNumber3, ohBoolean4)
 
-localPlayer.CharacterAdded:Connect(function(char)
-	character = char
-	rootPart = char:WaitForChild("HumanoidRootPart")
-	lastPosition = rootPart.Position
-end)
-
-
-local function StartTPDetection()
-	lastPosition = rootPart.Position
-	if heartbeatConn then
-		heartbeatConn:Disconnect()
-	end
-
-heartbeatConn = RunService.Heartbeat:Connect(function()
-		if not rootPart or not rootPart.Parent then return end
-
-		local currentPosition = rootPart.Position
-		local distance = (currentPosition - lastPosition).Magnitude
-
-		if distance > threshold then
-			localPlayer:Kick("AC Bypass failed, use a better executor and dm vasli for questions")
-		end
-		lastPosition = currentPosition
-	end)
-end
-
-local function StopTPDetection()
-	if heartbeatConn then
-		heartbeatConn:Disconnect()
-		heartbeatConn = nil
-	end
-end
-
-StartTPDetection()
-	
-local ohNumber1 = 999
-local ohNumber2 = -113.3239517211914
-local ohNumber3 = 50.57432174682617
-local ohBoolean4 = false
-
-game:GetService("ReplicatedStorage").Connections.RemoteFunction:InvokeServer(ohNumber1, ohNumber2, ohNumber3, ohBoolean4)
-
-wait(2.0)
-	
-StopTPDetection()
-	
+    wait(2.0)
+        
+    StopTPDetection()
 end
 
 checkac()
-
-local connections = {}
 
 if CoreGui:FindFirstChild("LoaderUI") then
 	CoreGui.LoaderUI:Destroy()
@@ -192,6 +186,7 @@ connections[#connections + 1] = title.InputBegan:Connect(function(input)
 				inputChangedConn:Disconnect()
 			end
 		end)
+		connections[#connections + 1] = inputChangedConn
 	end
 end)
 
@@ -206,7 +201,6 @@ connections[#connections + 1] = UserInputService.InputChanged:Connect(function(i
 		)
 	end
 end)
-
 
 local function addHoverEffect(button)
 	connections[#connections + 1] = button.MouseEnter:Connect(function()
